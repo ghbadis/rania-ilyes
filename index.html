@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ECD7CF">
+<title>Ilyes &amp; Rania | Rose Royale</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  /* Couleurs prises sur l'image d'invitation */
+  --paper: #ECD7CF;
+  --paper-deep: #E2C7BC;
+  --card: #EFDCD0;
+  --olive: #7D8752;
+  --olive-dark: #6F7A4E;
+  --brown: #8A5A2E;
+  --ink: #5E4540;
+  --soft: #8E716A;
+  --lace: none;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: #E3CBC2;
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 17px;
+  overflow-x: hidden;
+}
+body.locked { overflow: hidden; }
+button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+img { max-width: 100%; display: block; }
+.hidden { display: none !important; }
+.script { font-family: "Pinyon Script", cursive; font-weight: 400; }
+
+/* Colonne type mobile, centrée sur grand écran */
+.page {
+  width: min(100%, 480px);
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 0 60px #6b47401f;
+  min-height: 100svh;
+}
+
+/* ============ ENVELOPPE ============ */
+#cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  background: #E3CBC2;
+  transition: opacity .9s ease .9s, visibility 0s 1.8s;
+}
+.envelope {
+  position: relative;
+  width: min(100%, 480px);
+  height: 100%;
+  background: var(--lace), linear-gradient(170deg, #F2E0D8, #E8CEC4);
+  background-size: 260px 260px, cover;
+  perspective: 1400px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.flap-wrap {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 7px 9px #7a4c4238);
+  transform-origin: 50% 0;
+  transition: transform 1.1s cubic-bezier(.6,.05,.3,1) .35s, opacity .6s ease .9s;
+}
+.flap {
+  position: absolute;
+  inset: 0;
+  background: var(--lace), linear-gradient(175deg, #F6E7E0, #EED8CF);
+  background-size: 260px 260px, cover;
+}
+.seal {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: 116px;
+  height: 116px;
+  transform: translate(-50%, -50%);
+  border-radius: 48% 52% 50% 50% / 52% 47% 53% 48%;
+  background: radial-gradient(circle at 34% 28%, #EEF1E2 0, #CDD4B9 30%, #AEB894 62%, #8F9A73 100%);
+  box-shadow: 0 8px 16px #5a4a3a40, inset 0 -4px 8px #6f7a4e55, inset 0 4px 6px #ffffff90;
+  display: grid;
+  place-items: center;
+  transition: transform .55s ease, opacity .5s ease;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+.seal::before {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: 50%;
+  border: 2px solid #ffffff55;
+  box-shadow: inset 0 2px 3px #6f7a4e60, 0 1px 1px #ffffff80;
+}
+.seal span {
+  position: relative;
+  font: 400 40px "Pinyon Script", cursive;
+  color: #EEF2E1;
+  text-shadow: 1px 1px 1px #6f7a4ea0, -1px -1px 1px #ffffff90;
+}
+@keyframes pulse { 50% { transform: translate(-50%, -50%) scale(1.04); } }
+.touch-note {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(9% + env(safe-area-inset-bottom, 0px));
+  left: 0; right: 0;
+  margin: 0;
+  text-align: center;
+  font: italic 400 24px "Cormorant Garamond", serif;
+  color: #A98479;
+  pointer-events: none;
+  animation: fadePulse 2.4s ease-in-out infinite;
+}
+@keyframes fadePulse { 50% { opacity: .55; } }
+#cover.open .seal { animation: none; transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
+#cover.open .flap-wrap { transform: rotateX(-165deg); opacity: 0; }
+#cover.open .touch-note { opacity: 0; animation: none; }
+#cover.open { opacity: 0; visibility: hidden; }
+
+/* ============ ACCUEIL (VIDÉO) ============ */
+.hero {
+  position: relative;
+  aspect-ratio: 9 / 16;      /* même format que la vidéo : rien n'est coupé */
+  overflow: hidden;
+  text-align: center;
+  background: #EBD9CF;
+}
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;      /* pas de boutons du navigateur sur la vidéo */
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--paper) 0%, #ECD7CFd0 13%, #ECD7CF00 32%);
+  pointer-events: none;
+}
+.hero-bottom {
+  position: absolute;
+  z-index: 1;
+  left: 0; right: 0;
+  bottom: 22px;
+}
+.hero-kicker {
+  font: 500 13px "Cormorant Garamond", serif;
+  letter-spacing: 4px;
+  color: #7B6460;
+}
+.hero-date {
+  margin-top: 6px;
+  font: 500 17px "Cormorant Garamond", serif;
+  letter-spacing: 5px;
+}
+.chevron {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 22px;
+  animation: bob 1.8s ease-in-out infinite;
+}
+@keyframes bob { 50% { transform: translateY(7px); } }
+
+/* ============ SECTIONS ============ */
+.section {
+  padding: 56px 22px;
+  text-align: center;
+}
+.kicker {
+  font: 500 12px "Cormorant Garamond", serif;
+  letter-spacing: 4px;
+  color: #9C807A;
+  margin: 0;
+}
+.title {
+  font: 400 clamp(30px, 8.5vw, 36px) "Cormorant Garamond", serif;
+  color: var(--ink);
+  margin: 4px 0 0;
+}
+.title-line {
+  width: 46px;
+  height: 1px;
+  margin: 16px auto 28px;
+  background: #B48E78;
+}
+
+/* Fleurs gaufrées (même couleur que le papier) */
+.floral {
+  display: block;
+  width: min(100%, 300px);
+  height: auto;
+  margin: 0 auto 10px;
+  overflow: visible;
+}
+.floral.down { transform: scaleY(-1); margin: 22px auto 0; }
+
+/* COMPTE À REBOURS */
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.cd-item { width: 70px; }
+.cd-box {
+  height: 60px;
+  display: grid;
+  place-items: center;
+  background: #F6EAE4a8;
+  border: 1px solid #F8EEEA;
+  box-shadow: 0 4px 14px #a0786c1a;
+  font: 400 28px "Cormorant Garamond", serif;
+}
+.cd-label {
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+/* INVITATION */
+.invitation {
+  margin: 0 -22px;
+  -webkit-mask-image: radial-gradient(ellipse 54% 54% at 50% 50%, #000 82%, #0000 100%);
+          mask-image: radial-gradient(ellipse 54% 54% at 50% 50%, #000 82%, #0000 100%);
+}
+.invitation img { width: 100%; height: auto; }
+
+/* ENFANCE */
+.icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  color: #B48E78;
+}
+.childhood-text { font-size: 18px; color: var(--soft); margin: 0; }
+.childhood-script { font-size: 38px; margin: 0 0 24px; }
+.childhood-photo {
+  margin: 0 -22px;
+  position: relative;
+  aspect-ratio: 1321 / 1191;
+  background: var(--paper-deep);
+  overflow: hidden;
+}
+.childhood-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(1) contrast(1.05) sepia(.12);
+}
+
+/* LIEU */
+.venue-card {
+  background: #F4E6DF;
+  box-shadow: 0 10px 30px #a0786c22;
+  padding: 26px 18px 18px;
+}
+.venue-name { font: 600 24px "Cormorant Garamond", serif; margin: 0; }
+.venue-meta { color: var(--soft); line-height: 1.6; margin: 6px 0 18px; font-size: 18px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: var(--olive);
+  color: #FBFAF3;
+  text-decoration: none;
+  font-size: 16px;
+  box-shadow: 0 4px 12px #6f7a4e40;
+  transition: background .25s, transform .25s;
+}
+.btn:hover { background: var(--olive-dark); transform: translateY(-1px); }
+.btn svg { width: 15px; height: 15px; }
+.map {
+  margin-top: 22px;
+  border: 6px solid #fff;
+  box-shadow: 0 6px 18px #a0786c26;
+  aspect-ratio: 4 / 3.3;
+  background: #EEE6E1;
+}
+.map iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* PIED DE PAGE */
+footer {
+  padding: 40px 20px calc(70px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+}
+footer .script { font-size: 44px; margin: 0; }
+footer p { color: var(--soft); margin: 6px 0; }
+
+/* MUSIQUE */
+.music-btn {
+  position: fixed;
+  z-index: 40;
+  right: max(16px, calc(50vw - 240px + 16px));
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 0;
+  background: #8FAE3C;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px #4a5a2050;
+}
+.music-btn svg { width: 19px; height: 19px; }
+.music-btn .off { display: none; }
+.music-btn.muted .on { display: none; }
+.music-btn.muted .off { display: block; }
+.music-btn.muted { background: #A7AE95; }
+
+/* APPARITION AU DÉFILEMENT */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body class="locked">
+
+<!-- ENVELOPPE -->
+<div id="cover" role="button" tabindex="0" aria-label="Ouvrir l'invitation">
+  <div class="envelope">
+    <div class="flap-wrap"><div class="flap" id="flap"></div></div>
+    <div class="seal" aria-hidden="true"><span>I&amp;R</span></div>
+    <p class="touch-note">Touchez pour ouvrir</p>
+  </div>
+</div>
+
+<!-- MUSIQUE : fichier dans images/music/musique.mp3 -->
+<audio id="music" loop preload="none">
+  <source src="images/music/musique.mp3" type="audio/mpeg">
+</audio>
+<button class="music-btn muted hidden" id="musicBtn" aria-label="Activer ou couper la musique">
+  <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+  <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor"/><path d="m23 9-6 6M17 9l6 6"/></svg>
+</button>
+
+<main class="page">
+
+  <!-- ACCUEIL : vidéo des mariés, lancée au toucher de l'enveloppe -->
+  <header class="hero">
+    <video class="hero-video" id="heroVideo" muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           aria-label="Ilyes et Rania">
+      <source src="Ilyes%20%26%20Rania.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bottom">
+      <div class="hero-kicker">UN OUI POUR LA VIE</div>
+      <div class="hero-date">20 · 07 · 2027</div>
+      <a href="#countdown" class="chevron" aria-label="Défiler vers le bas">⌄</a>
+    </div>
+  </header>
+
+  <!-- COMPTE À REBOURS -->
+  <section class="section reveal" id="countdown">
+    <svg class="floral" aria-hidden="true"></svg>
+    <h2 class="title">Le Grand Jour Approche</h2>
+    <div class="title-line"></div>
+    <div class="countdown">
+      <div class="cd-item"><div class="cd-box" id="days">--</div><div class="cd-label">Jours</div></div>
+      <div class="cd-item"><div class="cd-box" id="hours">--</div><div class="cd-label">Heures</div></div>
+      <div class="cd-item"><div class="cd-box" id="minutes">--</div><div class="cd-label">Minutes</div></div>
+      <div class="cd-item"><div class="cd-box" id="seconds">--</div><div class="cd-label">Secondes</div></div>
+    </div>
+  </section>
+
+  <!-- INVITATION -->
+  <section class="section reveal" style="padding-top: 10px;">
+    <div class="invitation">
+      <img src="images/Invitation%20.png"
+           alt="La famille Ben Amor et la famille Bane ont le plaisir de vous inviter à célébrer l'union de leurs enfants Ilyes et Rania, le mardi 20 juillet 2027.">
+    </div>
+  </section>
+
+  <!-- ENFANCE -->
+  <section class="section reveal" style="padding-bottom: 0;">
+    <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2">
+      <circle cx="25" cy="36" r="14"/>
+      <circle cx="39" cy="36" r="14"/>
+      <path d="M21 21l4-6 4 6" stroke-width="1.6"/>
+    </svg>
+    <p class="childhood-text">Ces enfants vont</p>
+    <p class="childhood-script script">se marier !</p>
+    <div class="childhood-photo">
+      <img src="images/enfance.png" alt="Ilyes et Rania enfants">
+    </div>
+  </section>
+
+  <!-- LIEU -->
+  <section class="section reveal" id="venue">
+    <svg class="floral" aria-hidden="true"></svg>
+    <p class="kicker">OÙ &amp; QUAND</p>
+    <h2 class="title">Lieu &amp; Informations</h2>
+    <div class="title-line"></div>
+
+    <div class="venue-card">
+      <h3 class="venue-name">Espace Podium Gammarth</h3>
+      <p class="venue-meta">
+        Mardi 20 juillet 2027<br>
+        20h00
+      </p>
+      <a class="btn" target="_blank" rel="noopener" href="https://maps.app.goo.gl/TuZnrfxaC14BUHQo8">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11 22 2l-9 19-2-8-8-2z"/></svg>
+        Obtenir l'itinéraire
+      </a>
+      <div class="map">
+        <iframe title="Carte : Espace Podium Gammarth" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://maps.google.com/maps?q=Espace%20Podium%20Gammarth&z=15&output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer class="reveal">
+    <svg class="floral" aria-hidden="true"></svg>
+    <p class="script">Ilyes &amp; Rania</p>
+    <p>20 · 07 · 2027</p>
+    <p>Merci de partager avec nous ce jour si précieux</p>
+    <svg class="floral down" aria-hidden="true"></svg>
+  </footer>
+</main>
+
+<script>
+// ---------- MOTIF DE DENTELLE GAUFRÉE DE L'ENVELOPPE ----------
+(function buildLace() {
+  let seed = 11;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const W = 260;
+
+  function sprig(x, y, ang, len, col) {
+    let d = `M${x.toFixed(1)} ${y.toFixed(1)}`;
+    let leaves = "";
+    const bend = (rnd() - .5) * 2.6;
+    const n = 9, step = len / n;
+    let px = x, py = y, a = ang;
+    for (let i = 0; i < n; i++) {
+      a += bend / n;
+      const nx = px + Math.cos(a) * step, ny = py + Math.sin(a) * step;
+      d += ` L${nx.toFixed(1)} ${ny.toFixed(1)}`;
+      const size = (1 - i / n) * 2.6 + 1.8;
+      for (const side of [-1, 1]) {
+        const la = a + side * 0.8;
+        const lx = nx + Math.cos(la) * size * .75, ly = ny + Math.sin(la) * size * .75;
+        leaves += `<ellipse cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" rx="${size.toFixed(1)}" ry="${(size * .42).toFixed(1)}" transform="rotate(${(la * 57.3).toFixed(0)} ${lx.toFixed(1)} ${ly.toFixed(1)})"/>`;
+      }
+      px = nx; py = ny;
+    }
+    leaves += `<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="4" ry="2" transform="rotate(${(a * 57.3).toFixed(0)} ${px.toFixed(1)} ${py.toFixed(1)})"/>`;
+    return `<g fill="${col}"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.2" stroke-linejoin="round"/>${leaves}</g>`;
+  }
+
+  let g = "";
+  // grille 4x4 décalée pour répartir les branches sans paquets
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+    const gold = (r * 4 + c) % 6 === 2;
+    const x = (c + .5 + (rnd() - .5) * .5) * W / 4;
+    const y = (r + .5 + (rnd() - .5) * .5) * W / 4;
+    g += sprig(x, y, rnd() * Math.PI * 2, 34 + rnd() * 22, gold ? "#E4D3AE" : "#F6E6E0");
+  }
+  for (let i = 0; i < 18; i++) {
+    g += `<circle cx="${(rnd() * W).toFixed(1)}" cy="${(rnd() * W).toFixed(1)}" r="${(1 + rnd() * 1.4).toFixed(1)}" fill="#F6E6E0"/>`;
+  }
+  let uses = "";
+  for (const dx of [-W, 0, W]) for (const dy of [-W, 0, W]) {
+    if (dx || dy) uses += `<use href="#t" x="${dx}" y="${dy}"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${W}">
+    <defs><filter id="e" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="1.2" stdDeviation=".7" flood-color="#8a5a50" flood-opacity=".35"/>
+      <feDropShadow dx="-.7" dy="-.7" stdDeviation=".4" flood-color="#fff" flood-opacity=".9"/>
+    </filter></defs>
+    <g filter="url(#e)"><g id="t">${g}</g>${uses}</g></svg>`;
+  document.documentElement.style.setProperty("--lace",
+    `url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
+})();
+
+// ---------- RABAT FESTONNÉ DE L'ENVELOPPE ----------
+(function buildFlap() {
+  const top = 30, tip = 50, bumps = 18, amp = 1.1;
+  const pts = ["0% 0%", "100% 0%"];
+  function edge(x1, y1, x2, y2) {
+    const samples = bumps * 6;
+    for (let i = 0; i <= samples; i++) {
+      const t = i / samples;
+      const wave = Math.abs(Math.sin(t * bumps * Math.PI)) * amp;
+      pts.push(`${(x1 + (x2 - x1) * t).toFixed(2)}% ${(y1 + (y2 - y1) * t + wave).toFixed(2)}%`);
+    }
+  }
+  edge(100, top, 50, tip);
+  edge(50, tip, 0, top);
+  const poly = `polygon(${pts.join(",")})`;
+  const flap = document.getElementById("flap");
+  flap.style.clipPath = poly;
+  flap.style.webkitClipPath = poly;
+})();
+
+// ---------- FLEURS GAUFRÉES (style de l'invitation) ----------
+(function buildFlorals() {
+  // Petite fleur à 5 pétales
+  function flower(x, y, r) {
+    let s = "";
+    for (let i = 0; i < 5; i++) {
+      const a = i * Math.PI * 2 / 5 - Math.PI / 2;
+      s += `<circle cx="${(x + Math.cos(a) * r).toFixed(1)}" cy="${(y + Math.sin(a) * r).toFixed(1)}" r="${(r * .78).toFixed(1)}"/>`;
+    }
+    return s + `<circle cx="${x}" cy="${y}" r="${(r * .45).toFixed(1)}" fill="#E6CDC2"/>`;
+  }
+  // Point sur une courbe de Bézier cubique
+  function bez(p, t) {
+    const u = 1 - t;
+    return [0, 1].map(k => u*u*u*p[0][k] + 3*u*u*t*p[1][k] + 3*u*t*t*p[2][k] + t*t*t*p[3][k]);
+  }
+  // Une branche : tige principale + petites tiges fleuries
+  function branch() {
+    const P = [[150, 8], [120, 6], [70, 22], [22, 62]];
+    let stems = `M${P[0]} C${P[1]} ${P[2]} ${P[3]}`;
+    let flowers = "";
+    [.18, .34, .5, .66, .8, .93].forEach((t, i) => {
+      const [x, y] = bez(P, t);
+      const up = i % 2 === 0 ? -1 : 1;
+      const ex = x - 10 - (i % 3) * 3, ey = y + up * (12 + (i % 2) * 4);
+      stems += ` M${x.toFixed(1)} ${y.toFixed(1)} Q${(x - 2).toFixed(1)} ${(y + up * 8).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
+      flowers += flower(ex, ey, 3.4 - (i % 2) * .6);
+      // bouton
+      const bx = x - 4, by = y + up * 6;
+      flowers += `<circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="1.9"/>`;
+    });
+    flowers += flower(P[3][0], P[3][1], 3.8);
+    return { stems, flowers };
+  }
+  const { stems, flowers } = branch();
+  const half = `<path d="${stems}" fill="none" stroke="#F1DFD7" stroke-width="1.4" stroke-linecap="round"/>
+                <g fill="#F1DFD7">${flowers}</g>`;
+  document.querySelectorAll("svg.floral").forEach((svg, i) => {
+    svg.setAttribute("viewBox", "0 0 300 80");
+    svg.innerHTML = `
+      <defs><filter id="emb${i}" x="-10%" y="-30%" width="120%" height="160%">
+        <feDropShadow dx=".9" dy="1.1" stdDeviation=".6" flood-color="#8a5a4a" flood-opacity=".45"/>
+        <feDropShadow dx="-.6" dy="-.6" stdDeviation=".4" flood-color="#fff" flood-opacity=".95"/>
+      </filter></defs>
+      <g filter="url(#emb${i})" fill="#F1DFD7">
+        <g>${half}</g>
+        <g transform="translate(300 0) scale(-1 1)">${half}</g>
+        ${flower(150, 9, 3.6)}
+      </g>`;
+  });
+})();
+
+// ---------- OUVERTURE ----------
+const cover = document.getElementById("cover");
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+const heroVideo = document.getElementById("heroVideo");
+let opened = false;
+
+function openInvitation() {
+  if (opened) return;
+  opened = true;
+  cover.classList.add("open");
+  document.body.classList.remove("locked");
+  musicBtn.classList.remove("hidden");
+  heroVideo.currentTime = 0;
+  heroVideo.play().catch(() => {});
+  playMusic();
+  startCountdown();
+  setTimeout(() => cover.remove(), 2000);
+}
+cover.addEventListener("click", openInvitation);
+cover.addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openInvitation(); }
+});
+
+// ---------- VIDÉO EN CONTINU ----------
+// Certains navigateurs mettent en pause une vidéo sortie de l'écran :
+// on la relance dès qu'elle est de nouveau visible ou que l'onglet revient.
+function keepVideoPlaying() {
+  if (opened && heroVideo.paused) heroVideo.play().catch(() => {});
+}
+new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) keepVideoPlaying();
+}).observe(heroVideo);
+heroVideo.addEventListener("pause", () => setTimeout(keepVideoPlaying, 200));
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) keepVideoPlaying();
+});
+
+// ---------- MUSIQUE ----------
+function playMusic() {
+  music.play()
+    .then(() => musicBtn.classList.remove("muted"))
+    .catch(() => musicBtn.classList.add("muted"));
+}
+musicBtn.addEventListener("click", () => {
+  if (music.paused) playMusic();
+  else { music.pause(); musicBtn.classList.add("muted"); }
+});
+
+// ---------- COMPTE À REBOURS ----------
+const weddingDate = new Date("2027-07-20T20:00:00+01:00").getTime();
+function startCountdown() {
+  function tick() {
+    const diff = Math.max(0, weddingDate - Date.now());
+    const v = {
+      days: Math.floor(diff / 86400000),
+      hours: Math.floor(diff % 86400000 / 3600000),
+      minutes: Math.floor(diff % 3600000 / 60000),
+      seconds: Math.floor(diff % 60000 / 1000)
+    };
+    for (const k in v) document.getElementById(k).textContent = String(v[k]).padStart(2, "0");
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ---------- APPARITION AU DÉFILEMENT ----------
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add("visible"); io.unobserve(en.target); }
+  });
+}, { threshold: .12 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
